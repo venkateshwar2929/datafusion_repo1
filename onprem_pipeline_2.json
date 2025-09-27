@@ -1,0 +1,53 @@
+{
+  "name": "onprem_pipeline_2",
+  "appVersion": "fc62aab5-9ab8-11f0-ac74-9622d25015dc",
+  "description": "Data Pipeline Application",
+  "change": {
+    "author": "cdap",
+    "creationTimeMillis": 1758877974792,
+    "latest": true
+  },
+  "configuration": "{\"resources\":{\"memoryMB\":2048.0,\"virtualCores\":1.0},\"driverResources\":{\"memoryMB\":2048.0,\"virtualCores\":1.0},\"connections\":[{\"from\":\"MySQL\",\"to\":\"Wrangler\"},{\"from\":\"Wrangler\",\"to\":\"GCS\"}],\"comments\":[],\"postActions\":[],\"properties\":{},\"processTimingEnabled\":true,\"stageLoggingEnabled\":false,\"stages\":[{\"name\":\"MySQL\",\"plugin\":{\"name\":\"Mysql\",\"type\":\"batchsource\",\"label\":\"MySQL\",\"artifact\":{\"name\":\"mysql-plugin\",\"version\":\"1.12.3\",\"scope\":\"SYSTEM\"},\"properties\":{\"useConnection\":\"true\",\"referenceName\":\"ref\",\"database\":\"companyDB\",\"importQuery\":\"select * from customers\",\"numSplits\":\"1\",\"fetchSize\":\"1000\",\"useSSL\":\"If available\",\"useCompression\":\"false\",\"useAnsiQuotes\":\"false\",\"autoReconnect\":\"false\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"outputSchema\\\",\\\"fields\\\":[{\\\"name\\\":\\\"customer_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]},{\\\"name\\\":\\\"customer_name\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]},{\\\"name\\\":\\\"region_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]}]}\",\"connection\":\"${conn(onprem1)}\"}},\"outputSchema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"outputSchema\\\",\\\"fields\\\":[{\\\"name\\\":\\\"customer_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]},{\\\"name\\\":\\\"customer_name\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]},{\\\"name\\\":\\\"region_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]}]}\",\"id\":\"MySQL\"},{\"name\":\"Wrangler\",\"plugin\":{\"name\":\"Wrangler\",\"type\":\"transform\",\"label\":\"Wrangler\",\"artifact\":{\"name\":\"wrangler-transform\",\"version\":\"4.11.1\",\"scope\":\"SYSTEM\"},\"properties\":{\"field\":\"*\",\"expressionLanguage\":\"jexl\",\"precondition\":\"false\",\"directives\":\"filter-rows-on regex-not-match region_id ^1$\",\"on-error\":\"fail-pipeline\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"output\\\",\\\"fields\\\":[{\\\"name\\\":\\\"customer_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]},{\\\"name\\\":\\\"customer_name\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]},{\\\"name\\\":\\\"region_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]}]}\",\"workspaceId\":\"748a6c7c-8607-4bac-b086-b36c689590fc\"}},\"outputSchema\":[{\"name\":\"etlSchemaBody\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"output\\\",\\\"fields\\\":[{\\\"name\\\":\\\"customer_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]},{\\\"name\\\":\\\"customer_name\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]},{\\\"name\\\":\\\"region_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]}]}\"}],\"inputSchema\":[{\"name\":\"MySQL\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"outputSchema\\\",\\\"fields\\\":[{\\\"name\\\":\\\"customer_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]},{\\\"name\\\":\\\"customer_name\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]},{\\\"name\\\":\\\"region_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]}]}\"}],\"id\":\"Wrangler\"},{\"name\":\"GCS\",\"plugin\":{\"name\":\"GCS\",\"type\":\"batchsink\",\"label\":\"GCS\",\"artifact\":{\"name\":\"google-cloud\",\"version\":\"0.24.1\",\"scope\":\"SYSTEM\"},\"properties\":{\"useConnection\":\"false\",\"project\":\"indigo-coder-472404-b9\",\"serviceAccountType\":\"filePath\",\"serviceFilePath\":\"auto-detect\",\"path\":\"gs://venkatesh_bucket1/cleaned_data\",\"suffix\":\"yyyy-MM-dd-HH-mm\",\"format\":\"csv\",\"location\":\"us\",\"contentType\":\"application/octet-stream\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"output\\\",\\\"fields\\\":[{\\\"name\\\":\\\"customer_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]},{\\\"name\\\":\\\"customer_name\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]},{\\\"name\\\":\\\"region_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]}]}\",\"writeHeader\":\"true\"}},\"outputSchema\":[{\"name\":\"etlSchemaBody\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"output\\\",\\\"fields\\\":[{\\\"name\\\":\\\"customer_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]},{\\\"name\\\":\\\"customer_name\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]},{\\\"name\\\":\\\"region_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]}]}\"}],\"inputSchema\":[{\"name\":\"Wrangler\",\"schema\":\"{\\\"type\\\":\\\"record\\\",\\\"name\\\":\\\"output\\\",\\\"fields\\\":[{\\\"name\\\":\\\"customer_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]},{\\\"name\\\":\\\"customer_name\\\",\\\"type\\\":[\\\"string\\\",\\\"null\\\"]},{\\\"name\\\":\\\"region_id\\\",\\\"type\\\":[\\\"int\\\",\\\"null\\\"]}]}\"}],\"id\":\"GCS\"}],\"schedule\":\"0 1 */1 * *\",\"engine\":\"spark\",\"numOfRecordsPreview\":100.0,\"rangeRecordsPreview\":{\"min\":1.0,\"max\":\"5000\"},\"maxConcurrentRuns\":1.0}",
+  "datasets": [],
+  "programs": [
+    {
+      "type": "Spark",
+      "app": "onprem_pipeline_2",
+      "name": "phase-1",
+      "description": "Sources \u0027MySQL\u0027 to sinks \u0027GCS\u0027."
+    },
+    {
+      "type": "Workflow",
+      "app": "onprem_pipeline_2",
+      "name": "DataPipelineWorkflow",
+      "description": "Data Pipeline Workflow"
+    }
+  ],
+  "plugins": [
+    {
+      "id": "GCS",
+      "name": "GCS",
+      "type": "batchsink"
+    },
+    {
+      "id": "MySQL",
+      "name": "Mysql",
+      "type": "batchsource"
+    },
+    {
+      "id": "Wrangler",
+      "name": "Wrangler",
+      "type": "transform"
+    },
+    {
+      "id": "GCS:csv",
+      "name": "csv",
+      "type": "validatingOutputFormat"
+    }
+  ],
+  "artifact": {
+    "name": "cdap-data-pipeline",
+    "version": "6.11.1",
+    "scope": "SYSTEM"
+  }
+}
